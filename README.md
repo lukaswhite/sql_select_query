@@ -1,4 +1,4 @@
-# SQl Select Query
+# SQL Select Query
 
 A tiny Dart library for constructing SQl SELECT queries programmatically. It's  particularly useful if you need to build them dynamically.
 
@@ -248,4 +248,4 @@ query
     ..enableDebug();
 ```
 
-Calling `debug()` will return `SELECT forename, surname FROM people WHERE age ? 18 AND active = true`.
+Calling `debug()` will return `SELECT forename, surname FROM people WHERE age ? 18 AND active = true`; print it to the console, inspect it in the debugger, maybe even paste it into an SQL tool in your local environment &mdash; but don't use it in production.

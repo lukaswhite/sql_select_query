@@ -61,7 +61,7 @@ class SelectQuery {
     join(table, condition, type: JoinType.full);
   }
 
-  void where(String clause, {List<dynamic>? args}) {
+  void where(String clause, [List<dynamic>? args]) {
     _wheres.add(clause);
     _whereArgs.addAll(args ?? []);
   }

@@ -127,7 +127,7 @@ void main() {
       query
         ..selectAll()
         ..from('people')
-        ..where('age > ?', args: [18]);
+        ..where('age > ?', [18]);
       expect(query.build(), 'SELECT * FROM people WHERE age > ?');
       expect(query.args, [18]);  
     });
@@ -137,12 +137,12 @@ void main() {
         ..selectAll()
         ..from('people')
         ..matchAllWheres()
-        ..where('age > ?', args: [18])
-        ..where('active = ?', args: [true]);
+        ..where('age > ?', [18])
+        ..where('active = ?', [true]);
       expect(query.build(), 'SELECT * FROM people WHERE age > ? AND active = ?');
       expect(query.args, [18, true]);  
       
-      query.where('banned = ?', args: [false]);
+      query.where('banned = ?', [false]);
     
       expect(query.build(), 'SELECT * FROM people WHERE age > ? AND active = ? AND banned = ?');
       expect(query.args, [18, true, false]);  
@@ -154,9 +154,9 @@ void main() {
         ..selectAll()
         ..from('people')
         ..matchAllWheres()
-        ..where('age > ?', args: [18])
+        ..where('age > ?', [18])
         ..where('mask & 11 != 0')
-        ..where('active = ?', args: [true]);
+        ..where('active = ?', [true]);
       expect(query.build(), 'SELECT * FROM people WHERE age > ? AND mask & 11 != 0 AND active = ?');
       expect(query.args, [18, true]);  
       
@@ -167,7 +167,7 @@ void main() {
         ..selectAll()
         ..from('people')
         ..matchAllWheres()
-        ..where('age > ?', args: [18])
+        ..where('age > ?', [18])
         ..whereNotNull('email_confirmed')
         ..whereNull('banned_at');
       expect(query.build(), 'SELECT * FROM people WHERE age > ? AND email_confirmed IS NOT NULL AND banned_at IS NULL');
@@ -182,9 +182,9 @@ void main() {
         ..selectAll()
         ..from('people')
         ..matchAllWheres()
-        ..where('age > ?', args: [18])
+        ..where('age > ?', [18])
         ..where('mask & 11 != 0')
-        ..where('active = ?', args: [true]);
+        ..where('active = ?', [true]);
       expect(query.debug(), 'disabled');
     });
     test('multiple where clauses, some no args', () {
@@ -193,9 +193,9 @@ void main() {
         ..selectAll()
         ..from('people')
         ..matchAllWheres()
-        ..where('age > ?', args: [18])
+        ..where('age > ?', [18])
         ..where('mask & 11 != 0')
-        ..where('active = ?', args: [true])
+        ..where('active = ?', [true])
         ..enableDebug();
 
       expect(query.debug(), 'SELECT * FROM people WHERE age > 18 AND mask & 11 != 0 AND active = true');
@@ -208,10 +208,10 @@ void main() {
         ..selectAll()
         ..from('people')
         ..matchAllWheres()
-        ..where('age > ?', args: [18])
+        ..where('age > ?', [18])
         ..where('mask & 11 != 0')
-        ..where('title = ?', args: ['Mr.'])
-        ..where('active = ?', args: [true])
+        ..where('title = ?', ['Mr.'])
+        ..where('active = ?', [true])
         ..enableDebug();
 
       expect(query.debug(), 'SELECT * FROM people WHERE age > 18 AND mask & 11 != 0 AND title = "Mr." AND active = true');      
