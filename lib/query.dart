@@ -4,6 +4,7 @@ class SelectQuery {
   final List<String> _joins = [];
   final List<String> _wheres = [];
   final List<dynamic> _whereArgs = [];
+  final List<String> _conjunctions = [];
   bool _matchAllWheres = false;
   String? _having;
   int? _limit;
@@ -66,6 +67,16 @@ class SelectQuery {
     _whereArgs.addAll(args ?? []);
   }
 
+  void andWhere(String clause, [List<dynamic>? args]) {
+    and();
+    where(clause, args);
+  }
+
+  void orWhere(String clause, [List<dynamic>? args]) {
+    or();
+    where(clause, args);
+  }
+
   void whereNull(String column) {
     _wheres.add('$column IS NULL');
   }
@@ -81,6 +92,14 @@ class SelectQuery {
 
   void matchAllWheres() {
     _matchAllWheres = true;
+  }
+
+  void and() {
+    _conjunctions.add('AND');
+  }
+
+  void or() {
+    _conjunctions.add('OR');
   }
 
   void having(String having) {
@@ -134,11 +153,7 @@ class SelectQuery {
     }
     
     if(_wheres.isNotEmpty) {
-      if(_matchAllWheres) {
-        query += ' WHERE ${_wheres.join(' AND ')}';
-      } else {
-        query += ' WHERE ${_wheres.join(' OR ')}';
-      }
+      query += ' WHERE ${buildWhere()}';      
     }
 
     if(_groupBys.isNotEmpty) {
@@ -164,6 +179,24 @@ class SelectQuery {
       query += ' OFFSET $_offset';
     }
     return query;
+  }
+
+  String buildWhere() {
+    if(_matchAllWheres) {
+      return _wheres.join(' AND ');
+    }
+    if(_wheres.length == 1) {
+      return _wheres.first;
+    }
+    String clause = '';
+    for(var where in _wheres) {
+      clause += where;
+      if(_conjunctions.isNotEmpty) {
+        clause += ' ${_conjunctions.first} ';
+        _conjunctions.removeAt(0);
+      }
+    }
+    return clause;
   }
 
   List<dynamic> get args {

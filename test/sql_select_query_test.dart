@@ -175,6 +175,74 @@ void main() {
       
     });
   });
+  group('where clauses with conjunctions', () {
+    test('two clauses with and', () {
+      final query = SelectQuery();
+      query
+        ..selectAll()
+        ..from('people')
+        ..where('age > ?', [18])
+        ..and()
+        ..where('age < ?', [90]);
+        expect(query.build(), 'SELECT * FROM people WHERE age > ? AND age < ?');
+    });
+    test('three clauses with and', () {
+      final query = SelectQuery();
+      query
+        ..selectAll()
+        ..from('people')
+        ..where('age > ?', [18])
+        ..and()
+        ..where('age < ?', [90])
+        ..and()
+        ..where('active = ?', [true]);
+        expect(query.build(), 'SELECT * FROM people WHERE age > ? AND age < ? AND active = ?');
+    });
+    test('three clauses with and using alias', () {
+      final query = SelectQuery();
+      query
+        ..selectAll()
+        ..from('people')
+        ..where('age > ?', [18])
+        ..andWhere('age < ?', [90])
+        ..andWhere('active = ?', [true]);
+        expect(query.build(), 'SELECT * FROM people WHERE age > ? AND age < ? AND active = ?');
+    });
+  });
+  group('where clauses with conjunctions', () {
+    test('two clauses with or', () {
+      final query = SelectQuery();
+      query
+        ..selectAll()
+        ..from('people')
+        ..where('age > ?', [18])
+        ..or()
+        ..where('active = ?', [false]);
+        expect(query.build(), 'SELECT * FROM people WHERE age > ? OR active = ?');
+    });
+    test('three clauses with or', () {
+      final query = SelectQuery();
+      query
+        ..selectAll()
+        ..from('people')
+        ..where('age > ?', [18])        
+        ..or()
+        ..where('active = ?', [false])
+        ..or()
+        ..where('banned = ?', [true]);
+        expect(query.build(), 'SELECT * FROM people WHERE age > ? OR active = ? OR banned = ?');
+    });
+    test('three clauses with or using alias', () {
+      final query = SelectQuery();
+      query
+        ..selectAll()
+        ..from('people')
+        ..where('age > ?', [18])        
+        ..orWhere('active = ?', [false])
+        ..orWhere('banned = ?', [true]);
+        expect(query.build(), 'SELECT * FROM people WHERE age > ? OR active = ? OR banned = ?');
+    });
+  });
   group('debug where clauses', () {
     test('disabled by default', () {
       final query = SelectQuery();

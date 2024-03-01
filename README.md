@@ -127,9 +127,31 @@ query
     ..where('status = ?', ['active']);
 ```
 
-It's quite common to have a bunch of WHERE clauses where all of them must match; you may also find you need this when you don't know ahead of time how many you've got, so calling and() each time can be problematic.
+For multiple clauses:
 
-Just do this:
+```dart
+final query = SelectQuery();
+query
+    ///   
+    ..where('status = ?', ['active'])
+    ..and()
+    ..where('banned = ?', [false]);
+```
+
+Or:
+
+```dart
+final query = SelectQuery();
+query
+    ///   
+    ..where('status = ?', ['inactive'])
+    ..or()
+    ..where('banned = ?', [true]);
+```
+
+It's quite common to have a bunch of WHERE clauses where all of them must match; you may also find you need this when you don't know ahead of time how many you've got, so calling `and()` too early can be problematic.
+
+In this case, just call `matchAllWheres()`:
 
 ```dart
 final query = SelectQuery();
